@@ -1,13 +1,13 @@
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 5002;
-const route = require("./route");
+const port = process.env.PORT || 3000;
+const routes = require("./routes");
 
 require("./config/config.js");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(route);
+app.use(routes);
 
-app.listen(port, () => console.log(`Running on port ${port}`));
+app.listen(port, () => console.log(`Listen on port ${port}`));
