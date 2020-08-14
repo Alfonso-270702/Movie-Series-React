@@ -32,7 +32,7 @@ class MovieController {
       tags,
     })
       .then((data) => {
-        res.status(200).json(data.result);
+        res.status(200).json({ msg: "Successfully edit movie" });
       })
       .catch((err) => {
         res.status(500).json({ msg: "Internal Server Error" });
@@ -42,7 +42,7 @@ class MovieController {
   static removeMovie(req, res, next) {
     Movie.deleteMovie(req.params.id)
       .then((data) => {
-        res.status(200).json(data.result);
+        res.status(200).json({ msg: "Successfully remove movie" });
       })
       .catch((err) => {
         res.status(500).json({ msg: "Internal Server Error" });

@@ -5,6 +5,7 @@ class MovieOrchestrator {
   static async getMovie(req, res) {
     try {
       const cache = await redis.get("movies");
+      // console.log(cache);
       if (cache) {
         res.json(JSON.parse(cache));
       } else {
@@ -13,7 +14,7 @@ class MovieOrchestrator {
         res.json(data);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.config);
     }
   }
   static async addMovie(req, res) {
