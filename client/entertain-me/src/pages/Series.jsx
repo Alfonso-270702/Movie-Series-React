@@ -2,9 +2,9 @@ import React from "react";
 import { useQuery, gql } from "@apollo/client";
 import FilmCard from "../components/FilmCard";
 
-const GET_MOVIES = gql`
-  query GetMovies {
-    movies {
+const GET_SERIES = gql`
+  query GetSeries {
+    serie {
       _id
       title
       overview
@@ -15,20 +15,20 @@ const GET_MOVIES = gql`
   }
 `;
 
-function Home() {
-  const { data, error, loading } = useQuery(GET_MOVIES);
+function Series() {
+  const { data, error, loading } = useQuery(GET_SERIES);
 
   if (loading) return <h1>LOADING...</h1>;
   if (error) return <h1>ERROR</h1>;
   return (
     <>
       <div className="d-flex flex-wrap container">
-        {data.movies.map((movie) => (
-          <FilmCard key={movie._id} film={movie} type={"movie"} />
+        {data.serie.map((serie) => (
+          <FilmCard key={serie._id} film={serie} type={"serie"} />
         ))}
       </div>
     </>
   );
 }
 
-export default Home;
+export default Series;
