@@ -11,9 +11,11 @@ const typeDefs = gql`
     popularity: Float
     tags: [String]
   }
+
   extend type Query {
     serie: [Series]
   }
+
   input newSeries {
     title: String!
     overview: String!
@@ -21,6 +23,7 @@ const typeDefs = gql`
     popularity: Float!
     tags: [String!]
   }
+
   input editSeries {
     title: String!
     overview: String!
@@ -28,6 +31,7 @@ const typeDefs = gql`
     popularity: Float!
     tags: [String!]
   }
+
   type removedMessage {
     msg: String
   }
@@ -35,8 +39,9 @@ const typeDefs = gql`
   type editedMessage {
     msg: String
   }
+
   extend type Mutation {
-    addSeries(serie: newSeries): Series
+    addSerie(series: newSeries): Series
     removeSeries(id: String): removedMessage
     editSeries(id: String, series: editSeries): editedMessage
   }
@@ -66,8 +71,8 @@ const resolvers = {
     },
   },
   Mutation: {
-    addSeries: async (parent, args, context, info) => {
-      const { title, overview, popularity, poster_path, tags } = args.serie;
+    addSerie: async (parent, args, context, info) => {
+      const { title, overview, popularity, poster_path, tags } = args.series;
       try {
         const { data } = await axios({
           url: "http://localhost:5002/tv-series",
@@ -108,12 +113,12 @@ const resolvers = {
       }
     },
     editSeries: async (parent, args, context, info) => {
-      const { title, overview, popularity, poster_path, tags } = args.serie;
+      const { title, overview, popularity, poster_path, tags } = args.series;
       const _id = args.id;
       try {
         const { data } = await axios({
           url: `http://localhost:5002/tv-series/${_id}`,
-          method: "post",
+          method: "put",
           data: {
             title,
             overview,

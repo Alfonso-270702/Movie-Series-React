@@ -40,14 +40,10 @@ const typeDefs = gql`
     msg: String
   }
 
-  input movieId {
-    _id: ID
-  }
-
   extend type Mutation {
     addMovie(movie: newMovie): Movie
     removeMovie(id: String): removeMessage
-    editMovie(id: movieId, movie: editMovie): editMessage
+    editMovie(id: String, movie: editMovie): editMessage
   }
 `;
 
@@ -108,7 +104,7 @@ const resolvers = {
       }
     },
     editMovie: async (parent, args, context, info) => {
-      const { _id } = args.id;
+      const _id = args.id;
       const { title, overview, popularity, poster_path, tags } = args.movie;
       try {
         const { data } = await axios({
