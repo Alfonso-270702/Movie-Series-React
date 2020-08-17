@@ -3,7 +3,7 @@ import { ApolloProvider } from "@apollo/client";
 import client from "./config/graphql";
 import NavbarTop from "./components/Navbar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Home, AddForm, Series } from "./pages";
+import { Home, AddForm, Series, EditForm } from "./pages";
 
 function App() {
   return (
@@ -14,6 +14,9 @@ function App() {
           <Switch>
             <Route path="/add-form">
               <AddForm />
+            </Route>
+            <Route path="/edit-form/:id">
+              <EditForm />
             </Route>
             <Route path="/series">
               <Series />

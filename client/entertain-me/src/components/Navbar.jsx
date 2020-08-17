@@ -18,7 +18,7 @@ function NavbarTop() {
   }
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="primary" expand="lg">
       <Navbar.Brand>React-Bootstrap</Navbar.Brand>
       <Navbar.Collapse>
         <Nav className="mr-auto">

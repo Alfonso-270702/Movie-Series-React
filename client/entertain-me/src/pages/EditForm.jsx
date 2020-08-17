@@ -1,57 +1,58 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { useLocation, useParams, useHistory } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
-import { useHistory } from "react-router-dom";
 
-const ADD_MOVIES = gql`
-  mutation AddMovie($insertMovie: newMovie) {
-    addMovie(movie: $insertMovie) {
-      _id
-      title
-      overview
-      poster_path
-      popularity
-      tags
+const EDIT_MOVIE = gql`
+  mutation EditMovie($id: String, $movie: editMovie) {
+    editMovie(id: $id, movie: $movie) {
+      msg
     }
   }
 `;
 
-const ADD_SERIE = gql`
-  mutation AddSerie($insertSerie: newSeries) {
-    addSerie(series: $insertSerie) {
-      _id
-      title
-      overview
-      poster_path
-      popularity
-      tags
+const EDIT_SERIE = gql`
+  mutation EditSerie($id: String, $series: editSeries) {
+    editSeries(id: $id, series: $series) {
+      msg
     }
   }
 `;
 
-function AddFrom() {
-  const [addMovie] = useMutation(ADD_MOVIES);
-  const [addSerie] = useMutation(ADD_SERIE);
+function EditForm() {
+  const location = useLocation();
+  const {
+    id,
+    title,
+    overview,
+    poster_path,
+    popularity,
+    tags,
+    type,
+  } = location.state;
 
   const history = useHistory();
 
   const [form, setForm] = useState({
-    title: "",
-    overview: "",
-    popularity: "",
-    poster_path: "",
-    tags: [],
+    title: title,
+    overview: overview,
+    popularity: popularity,
+    poster_path: poster_path,
+    tags: tags,
   });
 
-  const [type, setType] = useState("Movie");
+  const [typeEdit, setTypeEdit] = useState(type);
+
+  const [editMovie] = useMutation(EDIT_MOVIE);
+  const [editSeries] = useMutation(EDIT_SERIE);
 
   const category = [
-    "Action",
-    "Comedy",
-    "Horror",
-    "Thriller",
-    "Romance",
-    "Drama",
+    "action",
+    "comedy",
+    "horror",
+    "thriller",
+    "romance",
+    "drama",
   ];
 
   function onChangeForm(event) {
@@ -60,6 +61,7 @@ function AddFrom() {
     if (name === "popularity") {
       value = Number(value);
     }
+
     setForm({
       ...form,
       [name]: value,
@@ -67,24 +69,25 @@ function AddFrom() {
   }
 
   function handleTags(event) {
-    let newTag = form.tags;
     if (event.target.checked) {
-      newTag.push(event.target.value);
+      let temp = JSON.parse(JSON.stringify(form.tags));
+      temp.push(event.target.value);
       setForm({
         ...form,
-        tags: newTag,
+        tags: temp,
       });
     } else {
-      let unCheckTag = newTag.filter((tag) => event.target.value !== tag);
+      let temp = JSON.parse(JSON.stringify(form.tags));
+      temp = temp.filter((tag) => tag !== event.target.value);
       setForm({
         ...form,
-        tags: unCheckTag,
+        tags: temp,
       });
     }
   }
 
   function typeHandle(event) {
-    setType(event.target.value);
+    setTypeEdit(event.target.value);
   }
 
   function checkStatus(event) {
@@ -94,20 +97,24 @@ function AddFrom() {
 
   function submitForm() {
     if (type === "Movie") {
-      addMovie({
+      editMovie({
         variables: {
-          insertMovie: form,
+          id,
+          movie: form,
         },
         refetchQueries: ["GetMovies"],
       });
+
       history.push("/");
     } else if (type === "Series") {
-      addSerie({
+      editSeries({
         variables: {
-          insertSerie: form,
+          id,
+          series: form,
         },
         refetchQueries: ["GetSeries"],
       });
+
       history.push("/series");
     }
   }
@@ -139,7 +146,7 @@ function AddFrom() {
 
         <Form.Group>
           <Form.Label>Type</Form.Label>
-          <Form.Control as="select" value={type} onChange={typeHandle}>
+          <Form.Control as="select" value={typeEdit} onChange={typeHandle}>
             <option>Movie</option>
             <option>Series</option>
           </Form.Control>
@@ -175,6 +182,7 @@ function AddFrom() {
                 label={tag}
                 onChange={handleTags}
                 value={tag}
+                checked={form.tags.includes(tag)}
               />
             ))}
         </Form.Group>
@@ -186,4 +194,4 @@ function AddFrom() {
   );
 }
 
-export default AddFrom;
+export default EditForm;

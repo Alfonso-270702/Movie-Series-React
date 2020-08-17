@@ -24,7 +24,7 @@ function Series() {
     <>
       <div className="d-flex flex-wrap container">
         {data.serie.map((serie) => (
-          <FilmCard key={serie._id} film={serie} type={"serie"} />
+          <FilmCard key={serie._id} film={serie} type={"Series"} />
         ))}
       </div>
     </>

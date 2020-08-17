@@ -24,7 +24,7 @@ function Home() {
     <>
       <div className="d-flex flex-wrap container">
         {data.movies.map((movie) => (
-          <FilmCard key={movie._id} film={movie} type={"movie"} />
+          <FilmCard key={movie._id} film={movie} type={"Movie"} />
         ))}
       </div>
     </>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { gql, useMutation } from "@apollo/client";
+import { useHistory } from "react-router-dom";
 
 const REMOVE_MOVIE = gql`
   mutation RemoveMovie($id: String) {
@@ -19,20 +20,21 @@ const REMOVE_SERIE = gql`
 `;
 
 function FilmCard(props) {
-  const { _id, titile, overview, poster_path, popularity, tags } = props.film;
+  const { _id, title, overview, poster_path, popularity, tags } = props.film;
   const { type } = props;
+  const history = useHistory();
   const [removeMovie] = useMutation(REMOVE_MOVIE);
   const [removeSeries] = useMutation(REMOVE_SERIE);
 
   function remove(id) {
-    if (type === "movie") {
+    if (type === "Movie") {
       removeMovie({
         variables: {
           id,
         },
         refetchQueries: ["GetMovies"],
       });
-    } else if (type === "serie") {
+    } else if (type === "Series") {
       removeSeries({
         variables: {
           id,
@@ -40,6 +42,18 @@ function FilmCard(props) {
         refetchQueries: ["GetSeries"],
       });
     }
+  }
+
+  function editPage(id) {
+    history.push(`/edit-form/${id}`, {
+      id,
+      title,
+      overview,
+      poster_path,
+      popularity,
+      tags,
+      type,
+    });
   }
 
   return (
@@ -51,13 +65,15 @@ function FilmCard(props) {
           style={{ width: "286px", height: "500px" }}
         />
         <Card.Body>
-          <Card.Title>{titile}</Card.Title>
+          <Card.Title>{title}</Card.Title>
           <Card.Text>{overview}</Card.Text>
           <Card.Text>{tags.join(", ")}</Card.Text>
           <Card.Footer>
             <small className="text-muted">{popularity}</small>
           </Card.Footer>
-          <Button className="mr-1">Edit</Button>
+          <Button className="mr-1" onClick={() => editPage(_id)}>
+            Edit
+          </Button>
           <Button className="mr-1" onClick={() => remove(_id)}>
             Delete
           </Button>
