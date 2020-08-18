@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { gql, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ADD_MOVIES = gql`
   mutation AddMovie($insertMovie: newMovie) {
@@ -46,12 +47,18 @@ function AddFrom() {
   const [type, setType] = useState("Movie");
 
   const category = [
-    "Action",
-    "Comedy",
-    "Horror",
-    "Thriller",
-    "Romance",
-    "Drama",
+    "action",
+    "comedy",
+    "horror",
+    "thriller",
+    "romance",
+    "drama",
+    "sci-fi",
+    "mystery",
+    "martial arts",
+    "carton",
+    "anime",
+    "fantasy"
   ];
 
   function onChangeForm(event) {
@@ -69,6 +76,7 @@ function AddFrom() {
   function handleTags(event) {
     let newTag = form.tags;
     if (event.target.checked) {
+      console.log(event.target.value);
       newTag.push(event.target.value);
       setForm({
         ...form,
@@ -87,18 +95,18 @@ function AddFrom() {
     setType(event.target.value);
   }
 
-  function checkStatus(event) {
+  function submitForm(event) {
     event.preventDefault();
-    submitForm();
-  }
-
-  function submitForm() {
     if (type === "Movie") {
       addMovie({
         variables: {
           insertMovie: form,
         },
         refetchQueries: ["GetMovies"],
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Success Add Movie",
       });
       history.push("/");
     } else if (type === "Series") {
@@ -108,13 +116,18 @@ function AddFrom() {
         },
         refetchQueries: ["GetSeries"],
       });
+      Swal.fire({
+        icon: "success",
+        title: "Success Add Series",
+      });
       history.push("/series");
     }
   }
 
   return (
-    <div className="container">
-      <Form onSubmit={checkStatus}>
+    <div className="container mt-4">
+      <h1 className="text-center">Add Movies or Series</h1>
+      <Form onSubmit={submitForm}>
         <Form.Group>
           <Form.Label>Title</Form.Label>
           <Form.Control
@@ -168,9 +181,11 @@ function AddFrom() {
         </Form.Group>
         <Form.Group>
           <Form.Label>Tags</Form.Label>
+          <br />
           {category &&
             category.map((tag, index) => (
               <Form.Check
+                inline
                 key={index}
                 label={tag}
                 onChange={handleTags}

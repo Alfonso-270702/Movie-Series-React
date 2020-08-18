@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useLocation, useParams, useHistory } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
+import Swal from "sweetalert2";
 
 const EDIT_MOVIE = gql`
   mutation EditMovie($id: String, $movie: editMovie) {
@@ -53,6 +54,12 @@ function EditForm() {
     "thriller",
     "romance",
     "drama",
+    "sci-fi",
+    "mystery",
+    "martial arts",
+    "carton",
+    "anime",
+    "fantasy",
   ];
 
   function onChangeForm(event) {
@@ -90,12 +97,8 @@ function EditForm() {
     setTypeEdit(event.target.value);
   }
 
-  function checkStatus(event) {
+  function submitForm(event) {
     event.preventDefault();
-    submitForm();
-  }
-
-  function submitForm() {
     if (type === "Movie") {
       editMovie({
         variables: {
@@ -104,7 +107,10 @@ function EditForm() {
         },
         refetchQueries: ["GetMovies"],
       });
-
+      Swal.fire({
+        icon: "success",
+        title: "Success Edit Movie",
+      });
       history.push("/");
     } else if (type === "Series") {
       editSeries({
@@ -114,14 +120,18 @@ function EditForm() {
         },
         refetchQueries: ["GetSeries"],
       });
-
+      Swal.fire({
+        icon: "success",
+        title: "Success Edit Series",
+      });
       history.push("/series");
     }
   }
 
   return (
-    <div className="container">
-      <Form onSubmit={checkStatus}>
+    <div className="container mt-4">
+      <h1 className="text-center">Edit Movies or Series</h1>
+      <Form onSubmit={submitForm}>
         <Form.Group>
           <Form.Label>Title</Form.Label>
           <Form.Control
@@ -175,9 +185,11 @@ function EditForm() {
         </Form.Group>
         <Form.Group>
           <Form.Label>Tags</Form.Label>
+          <br />
           {category &&
             category.map((tag, index) => (
               <Form.Check
+                inline
                 key={index}
                 label={tag}
                 onChange={handleTags}

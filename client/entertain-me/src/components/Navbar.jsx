@@ -17,18 +17,40 @@ function NavbarTop() {
     history.push("/series");
   }
 
+  function favouritesPage() {
+    history.push("/favourites");
+  }
+
   return (
     <Navbar bg="primary" expand="lg">
-      <Navbar.Brand>React-Bootstrap</Navbar.Brand>
+      <Navbar.Brand style={{ fontWeight: "bold", fontStyle: "italic" }}>
+        LK 21
+      </Navbar.Brand>
       <Navbar.Collapse>
         <Nav className="mr-auto">
-          <Nav.Link onClick={() => homePage()}>Movie</Nav.Link>
-          <Nav.Link onClick={() => seriesPage()}>Series</Nav.Link>
-          <Nav.Link onClick={() => addPage()}>Add From</Nav.Link>
-          <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-            <NavDropdown.Item>Action</NavDropdown.Item>
-            <NavDropdown.Item>Another action</NavDropdown.Item>
-            <NavDropdown.Item>Something</NavDropdown.Item>
+          <Nav.Link onClick={() => homePage()} style={{ fontWeight: "bold" }}>
+            Movie
+          </Nav.Link>
+          <Nav.Link onClick={() => seriesPage()} style={{ fontWeight: "bold" }}>
+            Series
+          </Nav.Link>
+          <NavDropdown
+            title="More"
+            id="basic-nav-dropdown"
+            style={{ fontWeight: "bold" }}
+          >
+            <NavDropdown.Item
+              onClick={() => addPage()}
+              style={{ fontWeight: "bold" }}
+            >
+              Add Form
+            </NavDropdown.Item>
+            <NavDropdown.Item
+              onClick={() => favouritesPage()}
+              style={{ fontWeight: "bold" }}
+            >
+              Favourites
+            </NavDropdown.Item>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>
